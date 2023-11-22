@@ -15,7 +15,7 @@
             <img v-if="!first_flag_loading" :src="first_country_flag" alt="">
           </div>
           <select v-model="first_country" @change="handleCountrySelect(1)">
-            <option value="Select the first country">Select the first country</option>
+            <option value="default">Select the first country</option>
             <option v-for="country in countries" :key="country.name" :value="country.name">
               {{ country.name.common }}
             </option>
@@ -30,7 +30,7 @@
             <img v-if="!second_flag_loading" :src="second_country_flag" alt="">
           </div>
           <select v-model="second_country" @change="handleCountrySelect(2)">
-            <option value="Select the second country">Select the second country</option>
+            <option value="default">Select the second country</option>
             <option v-for="country in countries" :key="country.name" :value="country.name">              
               {{ country.name.common }}
             </option>
@@ -49,8 +49,10 @@
       return {
         data: [],
         countries: [],
-        first_country_flag: "../assets/un.png",
-        second_country_flag: "../assets/un.png",
+        first_country: "default",
+        second_country: "default",
+        first_country_flag: require("../assets/un.png"),
+        second_country_flag: require("../assets/un.png"),
         first_flag_loading: false,
         second_flag_loading: false,
         loading: true
@@ -65,7 +67,7 @@
         .then(response => {
           this.loading = false
           this.countries = response.data
-          console.log(response.data)
+          this.countries = this.orderByNameASC(response.data)
         })
         .catch(error => {
           console.error("Erro na requisição:", error)
@@ -73,9 +75,8 @@
         })
       },
 
-      handleCountrySelect(country_number) {
-        
-        if (country_number == 1) {
+      handleCountrySelect(country_number) {        
+        if (country_number == 1 && this.first_country != 'default') {
           this.first_flag_loading = true;
           let selected_country = this.countries.find(country => country.name == this.first_country)
           this.first_country_flag = selected_country.flags.svg
@@ -84,7 +85,7 @@
             this.first_flag_loading = false
           }, 500);
           
-        } else if (country_number == 2) {
+        } else if (country_number == 2 && this.second_country != 'default') {
           this.second_flag_loading = true;
           let selected_country = this.countries.find(country => country.name == this.second_country)
           this.second_country_flag = selected_country.flags.svg
@@ -93,6 +94,31 @@
             this.second_flag_loading = false
           }, 500);
         }
+
+        if (this.first_country == 'default') {
+          this.first_country_flag = require('../assets/un.png')
+        }
+
+        if (this.second_country == 'default') {
+          this.second_country_flag = require('../assets/un.png')
+        }
+      },
+
+      orderByNameASC(countries) {
+        return countries.sort((a, b) => {
+          const nameA = a.name.common.toUpperCase();
+          const nameB = b.name.common.toUpperCase();
+
+          if (nameA < nameB) {
+            return -1
+          }
+
+          if (nameA > nameB) {
+            return 1
+          }
+
+          return 0
+        })
       }
     },
 
