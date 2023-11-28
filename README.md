@@ -1,4 +1,4 @@
-# worldrelations-spa
+# globalrelations-spa
 
 ## Project setup
 ```
