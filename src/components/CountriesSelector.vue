@@ -37,7 +37,7 @@
           </select>
         </div>
       </div>
-      <button class="submit">Check</button>
+      <button @click="handleSubmit" class="submit">Check</button>
     </div>
 </template>
   
@@ -119,6 +119,10 @@
 
           return 0
         })
+      },
+
+      handleSubmit() {
+        this.$emit('userSelectedCountries', [[this.first_country.common, this.second_country.common]])
       }
     },
 
@@ -167,6 +171,7 @@
   .countries-selector .submit {
     height: 50px;
     font-size: 20px;
+    cursor: pointer;
   }
 
   .countries-selector p {

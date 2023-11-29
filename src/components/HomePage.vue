@@ -2,21 +2,37 @@
   <div class="homepage">
     <h1>globalrelations.com</h1>
     <p>Select two countries and get their “relationship status”.</p>
-    <CountriesSelector></CountriesSelector>
+    <CountriesSelector v-if="!showCountriesResult" @user-selected-countries="countriesSelected"></CountriesSelector>
+    <ShowCountriesResult v-if="showCountriesResult" :selectedCountries="selectedCountries"></ShowCountriesResult>
   </div>
 </template>
 
 <script>
 
 import CountriesSelector from './CountriesSelector.vue'
+import ShowCountriesResult from './ShowCountriesResult.vue'
+
 
 export default {
   name: 'HomePage',
+  data() {
+    return {
+      selectedCountries: [],
+      showCountriesResult: false
+    }
+  },
   components: {
-    CountriesSelector
+    CountriesSelector,
+    ShowCountriesResult
   },
   props: {
     msg: String
+  },
+  methods: {
+    countriesSelected(selected_countries) {
+      this.selectedCountries = selected_countries
+      this.showCountriesResult = true
+    }
   }
 }
 </script>
