@@ -48,6 +48,7 @@
     data() {
       return {
         data: [],
+        rest_countries_api_url: process.env.VUE_APP_COUNTRIES_API_URL,
         countries: [],
         first_country: "default",
         second_country: "default",
@@ -63,7 +64,7 @@
       getCountries() {
         this.loading = true;
 
-        axios.get('https://restcountries.com/v3.1/independent?status=true')
+        axios.get(this.rest_countries_api_url)
         .then(response => {
           this.loading = false
           this.countries = response.data
@@ -122,7 +123,10 @@
       },
 
       handleSubmit() {
-        this.$emit('userSelectedCountries', [[this.first_country.common, this.second_country.common]])
+        let first_country_obj = this.countries.find(country => country.name == this.first_country),
+            second_country_obj = this.countries.find(country => country.name == this.second_country)
+
+        this.$emit('userSelectedCountries', [[first_country_obj, second_country_obj]])
       }
     },
 

@@ -51,7 +51,7 @@ export default {
 
   .homepage p {
     font-size: 17px;
-    margin-bottom: 100px;
+    margin-bottom: 30px;
   }
 
   /* Ipad Pro, Desktop */

@@ -17,6 +17,7 @@ export default {
 * {
   padding: 0;
   margin: 0;
+  color: #000000;
 }
 
 body {
@@ -40,6 +41,9 @@ body {
   #app {
     padding-left: 0;
     padding-right: 0;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 </style>
