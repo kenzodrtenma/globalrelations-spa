@@ -1,5 +1,7 @@
 # globalrelations-spa
 
+<img src="public/images/globalrelations.png" style="width:100%;height: 360px;"/>
+
 ## Project setup
 ```
 yarn install
