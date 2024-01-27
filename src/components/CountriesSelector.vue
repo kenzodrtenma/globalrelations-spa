@@ -14,12 +14,13 @@
             </div>
             <img v-if="!first_flag_loading" :src="first_country_flag" alt="">
           </div>
-          <select v-model="first_country" @change="handleCountrySelect(1)">
+          <select v-model="first_country" @change="handleCountrySelect(1)" :class="{'errored' : first_country_error_msg}">
             <option value="default">Select the first country</option>
             <option v-for="country in countries" :key="country.name" :value="country.name">
               {{ country.name.common }}
             </option>
           </select>
+          <span class="error-msg" :class="{'on' : first_country_error_msg}">{{ first_country_error_msg }}</span>
         </div>
         <p>and</p>
         <div class="selector">
@@ -29,12 +30,13 @@
             </div>
             <img v-if="!second_flag_loading" :src="second_country_flag" alt="">
           </div>
-          <select v-model="second_country" @change="handleCountrySelect(2)">
+          <select v-model="second_country" @change="handleCountrySelect(2)" :class="{'errored' : second_country_error_msg}">
             <option value="default">Select the second country</option>
             <option v-for="country in countries" :key="country.name" :value="country.name">              
               {{ country.name.common }}
             </option>
           </select>
+          <span class="error-msg" :class="{'on' : second_country_error_msg}">{{ second_country_error_msg }}</span>
         </div>
       </div>
       <button @click="handleSubmit" class="submit">Check</button>
@@ -56,7 +58,9 @@
         second_country_flag: require("../assets/un.png"),
         first_flag_loading: false,
         second_flag_loading: false,
-        loading: true
+        loading: true,
+        first_country_error_msg: '',
+        second_country_error_msg: ''
       };
     },
 
@@ -123,8 +127,24 @@
       },
 
       handleSubmit() {
-        let first_country_obj = this.countries.find(country => country.name == this.first_country),
-            second_country_obj = this.countries.find(country => country.name == this.second_country)
+        if (this.first_country == 'default') {
+          this.first_country_error_msg = 'Required field'
+        } else {
+          this.first_country_error_msg = ''
+        }
+
+        if (this.second_country == 'default') {
+          this.second_country_error_msg = 'Required field'
+        } else {
+          this.second_country_error_msg = ''
+        }
+
+        if (this.first_country_error_msg || this.second_country_error_msg) {
+          return
+        }
+
+        let first_country_obj = this.countries.find(country => country.name == this.first_country)
+        let second_country_obj = this.countries.find(country => country.name == this.second_country)
 
         this.$emit('userSelectedCountries', [[first_country_obj, second_country_obj]])
       }
@@ -165,6 +185,20 @@
   .countries-selector .selector,
   .countries-selector select {
     width: 100%;
+  }
+  
+  .countries-selector select.errored {
+    border: 2px solid red;
+  }
+
+  .countries-selector .error-msg{
+    display: none;
+    margin-top: 10px;
+    color: red;
+  }
+
+  .countries-selector .error-msg.on{
+    display: flex;
   }
 
   .countries-selector select option {

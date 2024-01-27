@@ -30,6 +30,7 @@
 </template>
   
 <script>
+  import Swal from 'sweetalert2'
   import axios from 'axios';
 
   export default {
@@ -66,7 +67,8 @@
           this.loading = false
         })
         .catch(error => {
-          console.error("Erro na requisição:", error)
+          console.log(error)
+          Swal.fire('Deu ruim')
           this.loading = false
         })
       }
